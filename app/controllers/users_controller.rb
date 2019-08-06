@@ -4,13 +4,33 @@ class UsersController < ApplicationController
 		validator = GoogleIDToken::Validator.new
 		@id_token = request.headers["token"]
 		required_audience=JWT.decode(@id_token, nil, false)[0]['aud']
- 		payload = validator.check(@id_token, required_audience, required_audience)
-		@user=User.check(payload)
-		puts(@user)
-		return render json: @user, status: 200
+		begin
+ 			payload = validator.check(@id_token, required_audience, required_audience)
+ 		rescue GoogleIDToken::ValidationError => e
+ 			report "Cannot validate: #{e}"
+		end
+		@user = User.find_by(email: payload['email'])
+		if @user.blank?
+			@user = User.create(
+					email: payload['email'],
+					name:payload['name'],
+					confirmed_at: Time.now
+				)
+		end
+
+		if @user.confirmed_at.blank?
+			user.confirmed_at = Time.now
+			user.save
+		end
+		@token=JsonWebToken.encode(user_id: @user.id)
+		
+		render 'users/login.json.jbuilder', status: 200
 	end
 
 	def logout
 		@api_current_user.remove_auth_token_validity
 	end
 end
+
+
+

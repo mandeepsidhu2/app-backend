@@ -1,19 +1,21 @@
+require 'json_web_token'
 class ApplicationController < ActionController::API
 	  include ActionController::HttpAuthentication::Token::ControllerMethods
 
+
 	def set_api_current_user
-  		
-  @api_current_user = User.find_by_auth_token(request.headers["token"])
+		header=request.headers["token"]
+		begin
+		 @decoded = JsonWebToken.decode(header)
+		 @api_current_user = User.find(@decoded[:user_id])
+		 rescue ActiveRecord::RecordNotFound => e
+		report "User not found in records: #{e}"
+      render json: { errors: e.message }, status: :unauthorized
+	end
+	 rescue JWT::DecodeError => e
+	 	report "Jwt token expired: #{e}"
+      render json: { errors: e.message }, status: :unauthorized
+    end
 
-
-  	# check with auth token if current user is there
-  	if @api_current_user.blank?
-
-  	data = {
-			message: "You need to login first",
-		}
-
-		return render json: data, status: 401
-  	end
-  end
+	
 end
