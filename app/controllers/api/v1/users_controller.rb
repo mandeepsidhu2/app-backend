@@ -25,7 +25,7 @@ module Api
 					user.save
 				end
 				@token=JsonWebToken.encode(user_id: @user.id)
-				
+				#return render json:@token,status:200
 				render 'users/login.json.jbuilder', status: 200
 			end
 
