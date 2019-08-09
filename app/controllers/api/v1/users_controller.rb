@@ -24,8 +24,9 @@ module Api
 					user.confirmed_at = Time.now
 					user.save
 				end
+				puts("the user id is ",@user.id ," and token is ")
 				@token=JsonWebToken.encode(user_id: @user.id)
-				#return render json:@token,status:200
+				puts(@token)
 				render 'users/login.json.jbuilder', status: 200
 			end
 
@@ -35,6 +36,3 @@ module Api
 		end
 	end
 end
-
-
-

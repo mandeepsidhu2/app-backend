@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 		namespace :v1 do
 			get 'login', to: 'users#login'
 			get 'index', to: 'sessions#index'
+			get 'courses', to: 'courses#index'
 		end
 	end
 end
