@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 			get 'index', to: 'sessions#index'
 			get 'courses', to: 'courses#index'
 			get 'course_elements/:id', to: 'course_elements#index'
+			get 'lectures/:id', to: 'lecture#index'
 		end
 	end
 end
