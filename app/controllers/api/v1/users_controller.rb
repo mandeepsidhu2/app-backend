@@ -8,6 +8,7 @@ module Api
 				required_audience=JWT.decode(@id_token, nil, false)[0]['aud']
 				begin
 		 			payload = validator.check(@id_token, required_audience, required_audience)
+		 			puts("check this out",payload)
 		 		rescue GoogleIDToken::ValidationError => e
 		 			report "Cannot validate: #{e}"
 				end
