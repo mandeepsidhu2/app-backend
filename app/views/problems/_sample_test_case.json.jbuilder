@@ -1,0 +1,2 @@
+json.input sample_test_case.input
+json.output sample_test_case.output
