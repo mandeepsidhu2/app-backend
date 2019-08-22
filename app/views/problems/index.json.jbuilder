@@ -1,8 +1,9 @@
 json.array! @problems do |problem|
 	json.id problem.id
 	json.heading problem.heading
-	json.heading problem.statement
+	json.statement problem.statement
 	json.note problem.note
+	json.constraints problem.constraints
 	json.input_format problem.input_format
 	json.output_format problem.output_format
 
